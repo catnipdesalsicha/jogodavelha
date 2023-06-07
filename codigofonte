@@ -1,0 +1,132 @@
+import random
+
+#mostrando a tabela do jogo
+tabela=['_', '_', '_',
+        '_', '_', '_',
+        '_', '_', '_']
+Jogadoratual= "O"
+Vencedor= None
+jogorodando= True
+
+def jogotodo():
+
+    def printtabela(tabela):
+        print(tabela[0]+ " | " + tabela[1] + " | " + tabela[2])
+        print(tabela[3]+ " | " + tabela[4] + " | " + tabela[5])
+        print(tabela[6]+ " | " + tabela[7] + " | " + tabela[8])
+
+
+    #jogador inicia o jogo
+
+    def jogadorvez(tabela):
+
+        inp = int(input("Digite uma posição de 1-9: "))
+
+        if inp >= 1 and inp <= 9 and tabela[inp-1] == "_":
+            tabela[inp-1] = Jogadoratual
+
+        else:
+            "Posição Inválida ou já está ocupada, tente novamente"
+
+    #checar vencedor ou empate
+    def checarhorizontal(tabela):
+        global Vencedor
+
+        if tabela[0] == tabela[1] == tabela[2] and tabela[1] != "_": 
+            Vencedor = tabela[0]
+            return True
+        elif tabela[3] == tabela[4] == tabela[5] and tabela[3] != "_":
+            Vencedor = tabela[3]
+            return True
+        elif tabela[6] == tabela[7] == tabela[8] and tabela[6] != "_":
+            Vencedor = tabela[6]
+            return True
+        
+    def checardiagonal(tabela):
+        global Vencedor
+
+        if tabela[0] == tabela[4] == tabela[8] and tabela[0] != "_":
+            Vencedor = tabela[0]
+            return True
+        elif tabela[2] == tabela[4] == tabela[6] and tabela[2] != "_":
+            Vencedor = tabela[2]
+            return True
+
+    def checarvertical(tabela):
+        global Vencedor
+
+        if tabela[0] == tabela[3] == tabela [6] and tabela[0] != "_":
+            Vencedor = tabela[0]
+            return True
+        elif tabela[1] == tabela[4] == tabela [7] and tabela[1] != "_":
+            Vencedor = tabela[1]
+            return True
+        elif tabela[2] == tabela[5] == tabela [8] and tabela[2] != "_":
+            Vencedor = tabela[2]
+            return True
+        
+
+    def checarempate(tabela):
+        global jogorodando
+        if "_" not in tabela:
+            printtabela(tabela)
+            print("Empate")
+            jogorodando = False
+            exit()
+
+
+    def checarganhador():
+        if checardiagonal(tabela) or checarhorizontal(tabela) or checarvertical(tabela):
+            print(f"O vencedor é {Vencedor}")
+            jogorodando = False
+            exit()
+
+    #computador
+    def computador(tabela):
+        while Jogadoratual == "O":
+            posição = random.randint(0, 8)
+            if tabela[posição] == "_":
+                tabela[posição] == "O"
+                trocardeturno()
+
+
+    #trocar de turno
+    def trocardeturno():
+        global Jogadoratual
+        if Jogadoratual == "X":
+            Jogadoratual = "O"
+        else:
+            Jogadoratual = "X"
+
+    #checar vencedor ou empate de novo
+    while jogorodando:
+        printtabela(tabela)
+        jogadorvez(tabela)
+        checarganhador()
+        checarempate(tabela)
+        trocardeturno()
+        computador(tabela)
+        checarganhador()
+        checarempate(tabela)
+
+
+    #jogar de novo?
+
+    #sair do jogo
+jogotodo()
+while jogorodando == True:
+    op = input("Você quer continuar o jogo? 1- SIM 2-NÃO")
+    if op == 1:
+        jogotodo()
+    elif op == 2:
+        print("Jogo terminado")
+        break
+    else:
+        print("Opção inválida")
+        while jogorodando == True:
+            op = input("Você quer continuar o jogo? 1- SIM 2-NÃO")
+            if op == 1:
+                jogotodo()
+            elif op == 2:
+                print("Jogo terminado")
+                break
