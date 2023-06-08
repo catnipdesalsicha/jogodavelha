@@ -1,132 +1,91 @@
-import random
+op = input("Você deseja jogar? Digite sim ou nao: ")
 
-#mostrando a tabela do jogo
-tabela=['_', '_', '_',
-        '_', '_', '_',
-        '_', '_', '_']
-Jogadoratual= "O"
-Vencedor= None
-jogorodando= True
+while op.lower() == "sim":
+    tabuleiro = ['-', '-', '-',
+                '-', '-', '-',
+                '-', '-', '-']
+    jogadorAtual = "X"
+    vencedor = None
+    jogoRodando = True
 
-def jogotodo():
+    def printTabuleiro(tabuleiro):
+        # Código para imprimir o tabuleiro
+        print(tabuleiro[0] + " | " + tabuleiro[1] + " | " + tabuleiro[2])
+        print("-" * 9)
+        print(tabuleiro[3] + " | " + tabuleiro[4] + " | " + tabuleiro[5])
+        print("-" * 9)
+        print(tabuleiro[6] + " | " + tabuleiro[7] + " | " + tabuleiro[8])
 
-    def printtabela(tabela):
-        print(tabela[0]+ " | " + tabela[1] + " | " + tabela[2])
-        print(tabela[3]+ " | " + tabela[4] + " | " + tabela[5])
-        print(tabela[6]+ " | " + tabela[7] + " | " + tabela[8])
-
-
-    #jogador inicia o jogo
-
-    def jogadorvez(tabela):
-
-        inp = int(input("Digite uma posição de 1-9: "))
-
-        if inp >= 1 and inp <= 9 and tabela[inp-1] == "_":
-            tabela[inp-1] = Jogadoratual
-
-        else:
-            "Posição Inválida ou já está ocupada, tente novamente"
-
-    #checar vencedor ou empate
-    def checarhorizontal(tabela):
-        global Vencedor
-
-        if tabela[0] == tabela[1] == tabela[2] and tabela[1] != "_": 
-            Vencedor = tabela[0]
-            return True
-        elif tabela[3] == tabela[4] == tabela[5] and tabela[3] != "_":
-            Vencedor = tabela[3]
-            return True
-        elif tabela[6] == tabela[7] == tabela[8] and tabela[6] != "_":
-            Vencedor = tabela[6]
-            return True
-        
-    def checardiagonal(tabela):
-        global Vencedor
-
-        if tabela[0] == tabela[4] == tabela[8] and tabela[0] != "_":
-            Vencedor = tabela[0]
-            return True
-        elif tabela[2] == tabela[4] == tabela[6] and tabela[2] != "_":
-            Vencedor = tabela[2]
-            return True
-
-    def checarvertical(tabela):
-        global Vencedor
-
-        if tabela[0] == tabela[3] == tabela [6] and tabela[0] != "_":
-            Vencedor = tabela[0]
-            return True
-        elif tabela[1] == tabela[4] == tabela [7] and tabela[1] != "_":
-            Vencedor = tabela[1]
-            return True
-        elif tabela[2] == tabela[5] == tabela [8] and tabela[2] != "_":
-            Vencedor = tabela[2]
-            return True
-        
-
-    def checarempate(tabela):
-        global jogorodando
-        if "_" not in tabela:
-            printtabela(tabela)
-            print("Empate")
-            jogorodando = False
-            exit()
-
-
-    def checarganhador():
-        if checardiagonal(tabela) or checarhorizontal(tabela) or checarvertical(tabela):
-            print(f"O vencedor é {Vencedor}")
-            jogorodando = False
-            exit()
-
-    #computador
-    def computador(tabela):
-        while Jogadoratual == "O":
-            posição = random.randint(0, 8)
-            if tabela[posição] == "_":
-                tabela[posição] == "O"
-                trocardeturno()
-
-
-    #trocar de turno
-    def trocardeturno():
-        global Jogadoratual
-        if Jogadoratual == "X":
-            Jogadoratual = "O"
-        else:
-            Jogadoratual = "X"
-
-    #checar vencedor ou empate de novo
-    while jogorodando:
-        printtabela(tabela)
-        jogadorvez(tabela)
-        checarganhador()
-        checarempate(tabela)
-        trocardeturno()
-        computador(tabela)
-        checarganhador()
-        checarempate(tabela)
-
-
-    #jogar de novo?
-
-    #sair do jogo
-jogotodo()
-while jogorodando == True:
-    op = input("Você quer continuar o jogo? 1- SIM 2-NÃO")
-    if op == 1:
-        jogotodo()
-    elif op == 2:
-        print("Jogo terminado")
-        break
-    else:
-        print("Opção inválida")
-        while jogorodando == True:
-            op = input("Você quer continuar o jogo? 1- SIM 2-NÃO")
-            if op == 1:
-                jogotodo()
-            elif op == 2:
-                print("Jogo terminado")
+    def jogada(tabuleiro):
+        # Código para receber jogadas
+        while True:
+            if jogadorAtual == "X":
+                inp = int(input(f"Digite um número de 1-9 \033[1;34m Jogador (X) \033[0;0m : "))
+            else:
+                inp = int(input(f"Digite um número de 1-9 \033[1;31m Jogador (0) \033[0;0m : "))
+            if inp >= 1 and inp <= 9 and tabuleiro[inp-1] == "-":
+                tabuleiro[inp-1] = jogadorAtual
                 break
+            else:
+                if jogadorAtual == "X":
+                    print(f"Tente novamente, posição já ocupada - \033[1;34m Player (X) \033[0;0m ! ")
+                else:
+                    print(f"Tente novamente, posição já ocupada - \033[1;31m Player (0) \033[0;0m ! ")
+                printTabuleiro(tabuleiro)
+
+
+    def ganharHorizontal(tabuleiro):
+        # Código para verificar vitória horizontal
+        global vencedor
+        if (tabuleiro[0] == tabuleiro[1] == tabuleiro[2] and tabuleiro[0] != "-") or (tabuleiro[3] == tabuleiro[4] == tabuleiro[5] and tabuleiro[3] != "-") or (tabuleiro[6] == tabuleiro[7] == tabuleiro[8] and tabuleiro[6] != "-"):
+            vencedor = jogadorAtual
+            return True
+
+    def ganharVertical(tabuleiro):
+        # Código para verificar vitória vertical
+        global vencedor
+        if (tabuleiro[0] == tabuleiro[3] == tabuleiro[6] and tabuleiro[0] != "-") or (tabuleiro[1] == tabuleiro[4] == tabuleiro[7] and tabuleiro[1] != "-") or (tabuleiro[2] == tabuleiro[5] == tabuleiro[8] and tabuleiro[2] != "-"):
+            vencedor = jogadorAtual
+            return True
+
+    def ganharDiagonal(tabuleiro):
+        # Código para verificar vitória diagonal
+        global vencedor
+        if (tabuleiro[0] == tabuleiro[4] == tabuleiro[5] and tabuleiro[0] != "-") or (tabuleiro[2] == tabuleiro[4] == tabuleiro[6] and tabuleiro[2] != "-"):
+            vencedor = jogadorAtual
+            return True
+
+    def empate(tabuleiro):
+        # Código para verificar empate
+        global jogoRodando
+        if "-" not in tabuleiro:
+            printTabuleiro(tabuleiro)
+            print("Empatou!! ")
+            jogoRodando = False
+
+    def vitoria():
+        # Código para verificar vitória
+        if ganharDiagonal(tabuleiro) or ganharHorizontal(tabuleiro) or ganharVertical(tabuleiro):
+            print(f"O vencedor é:  {vencedor}")
+
+    def alterarJogador():
+        # Código para alterar o jogador
+        global jogadorAtual
+        if jogadorAtual == "X":
+            jogadorAtual = "O"
+        else:
+            jogadorAtual = "X"
+
+    while jogoRodando:
+        # Código principal do jogo
+        printTabuleiro(tabuleiro)
+        if vencedor != None:
+            break
+        jogada(tabuleiro)
+        vitoria()
+        empate(tabuleiro)
+        alterarJogador()
+
+    op = input("Você deseja jogar novamente? Digite sim ou nao: ")
+
+print("Até outra hora")
